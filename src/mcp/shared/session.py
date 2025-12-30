@@ -43,6 +43,13 @@ ReceiveNotificationT = TypeVar("ReceiveNotificationT", ClientNotification, Serve
 RequestId = str | int
 
 
+class RequestIdFnT(Protocol):
+    """Protocol for progress notification callbacks."""
+
+    async def __call__(
+        self, request_id: int
+    ) -> None: ...  # pragma: no branch
+
 class ProgressFnT(Protocol):
     """Protocol for progress notification callbacks."""
 
@@ -243,6 +250,7 @@ class BaseSession(
         request_read_timeout_seconds: float | None = None,
         metadata: MessageMetadata = None,
         progress_callback: ProgressFnT | None = None,
+        request_id_callback: RequestIdFnT | None = None,
     ) -> ReceiveResultT:
         """
         Sends a request and wait for a response. Raises an McpError if the
@@ -254,6 +262,8 @@ class BaseSession(
         """
         request_id = self._request_id
         self._request_id = request_id + 1
+        if request_id_callback:
+            await request_id_callback(request_id)
 
         response_stream, response_stream_reader = anyio.create_memory_object_stream[JSONRPCResponse | JSONRPCError](1)
         self._response_streams[request_id] = response_stream

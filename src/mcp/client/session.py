@@ -11,7 +11,7 @@ from mcp.client.experimental import ExperimentalClientFeatures
 from mcp.client.experimental.task_handlers import ExperimentalTaskHandlers
 from mcp.shared.context import RequestContext
 from mcp.shared.message import SessionMessage
-from mcp.shared.session import BaseSession, ProgressFnT, RequestResponder
+from mcp.shared.session import BaseSession, ProgressFnT,RequestIdFnT, RequestResponder
 from mcp.shared.version import SUPPORTED_PROTOCOL_VERSIONS
 
 DEFAULT_CLIENT_INFO = types.Implementation(name="mcp", version="0.1.0")
@@ -372,6 +372,7 @@ class ClientSession(
         progress_callback: ProgressFnT | None = None,
         *,
         meta: dict[str, Any] | None = None,
+        request_id_callback: RequestIdFnT | None = None,
     ) -> types.CallToolResult:
         """Send a tools/call request with optional progress callback support."""
 
@@ -388,6 +389,7 @@ class ClientSession(
             types.CallToolResult,
             request_read_timeout_seconds=read_timeout_seconds,
             progress_callback=progress_callback,
+            request_id_callback=request_id_callback,
         )
 
         if not result.isError:
