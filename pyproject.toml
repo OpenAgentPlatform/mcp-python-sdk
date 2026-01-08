@@ -1,5 +1,5 @@
 [project]
-name = "mcp"
+name = "dive-mcp-sdk"
 dynamic = ["version"]
 description = "Model Context Protocol SDK"
 readme = "README.md"
@@ -141,7 +141,7 @@ max-statements = 102                                       # Default is 50
 members = ["examples/clients/*", "examples/servers/*", "examples/snippets"]
 
 [tool.uv.sources]
-mcp = { workspace = true }
+dive-mcp-sdk = { workspace = true }
 
 [tool.pytest.ini_options]
 log_cli = true
