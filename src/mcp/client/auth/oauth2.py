@@ -197,7 +197,7 @@ class OAuthContext:
 
         auth_method = self.client_info.token_endpoint_auth_method
 
-        if auth_method == "client_secret_basic" and self.client_info.client_id and self.client_info.client_secret:
+        if auth_method in (None, "client_secret_basic") and self.client_info.client_id and self.client_info.client_secret:
             # URL-encode client ID and secret per RFC 6749 Section 2.3.1
             encoded_id = quote(self.client_info.client_id, safe="")
             encoded_secret = quote(self.client_info.client_secret, safe="")
